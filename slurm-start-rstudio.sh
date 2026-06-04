@@ -63,7 +63,7 @@ fi
 export PASSWORD=$(openssl rand -base64 15)
 
 # Pull our Docker image in a folder
-singularity pull $imagename $image
+singularity pull --disable-cache $imagename $image
 
 echo "*****************************************************"
 echo "Setup - from your laptop do:"
