@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # Allocate slurm resources, edit as necessary 
-#SBATCH --account=$PAWSEY_PROJECT
+#SBATCH --account=pawsey1172
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=64
