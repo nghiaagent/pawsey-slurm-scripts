@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # Allocate slurm resources, edit as necessary 
-#SBATCH --account=$PAWSEY_PROJECT
+#SBATCH --account=pawsey1172
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=64
@@ -63,7 +63,7 @@ fi
 export PASSWORD=$(openssl rand -base64 15)
 
 # Pull our Docker image in a folder
-singularity pull $imagename $image
+singularity pull --disable-cache $imagename $image
 
 echo "*****************************************************"
 echo "Setup - from your laptop do:"
