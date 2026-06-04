@@ -33,7 +33,7 @@ imagename=${image##*/}
 imagename=${imagename/:/_}.sif
 
 # Create a user-specific tmp directory to avoid clashes between users
-tmp_dir="/tmp/tmp_$USER"
+tmp_dir="${MYSCRATCH}/tmp/tmp_$USER"
 mkdir -p $tmp_dir
 
 # Get the hostname of the Setonix node
