@@ -3,13 +3,12 @@
 #SBATCH --account=pawsey1172
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=64G
 #SBATCH --time=24:00:00
 #SBATCH --job-name=rstudio_server
 #SBATCH --partition=work 
 #SBATCH --export=NONE
-#SBATCH --error=rstudio-%j.err
 
 # Set our working directory
 # Should be in a writable path with some space, like /scratch
