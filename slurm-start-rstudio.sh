@@ -9,6 +9,7 @@
 #SBATCH --job-name=rstudio_server
 #SBATCH --partition=work 
 #SBATCH --export=NONE
+#SBATCH --error=rstudio-%j.err
 
 # Set our working directory
 # Should be in a writable path with some space, like /scratch
@@ -80,6 +81,17 @@ echo "kill \$( ps x | grep 'ssh.*-L *${port}:${host}:${port}' | awk '{print \$1}
 echo "*****************************************************"
 echo ""
 
+# Create runtime directories required by newer RStudio Server versions
+mkdir -p ${tmp_dir}/var/run/rstudio-server
+mkdir -p ${tmp_dir}/var/lib/rstudio-server
+mkdir -p ${tmp_dir}/rstudio-server-data
+
+# Create a database config file (required by RStudio Server >= 1.4)
+cat > ${tmp_dir}/database.conf << EOF
+provider=sqlite
+directory=/var/lib/rstudio-server
+EOF
+
 # Launch our container
 # Note that content of /home will be lost after runtime
 # You'll need to manually change dir to the working dir through the RStudio interface
@@ -88,6 +100,10 @@ srun -N $SLURM_JOB_NUM_NODES -n $SLURM_NTASKS -c $SLURM_CPUS_PER_TASK \
   singularity exec -c \
   -B ${tmp_dir}:/tmp \
   -B ${dir}:$HOME \
-  -B ${tmp_dir}:/var \
+  -B ${tmp_dir}/var:/var \
   ${imagename} \
-  rserver --www-port ${port} --www-address 0.0.0.0 --auth-none=0 --auth-pam-helper-path=pam-helper --server-user=$(whoami) 
+  rserver --www-port ${port} --www-address 0.0.0.0 \
+    --auth-none=0 --auth-pam-helper-path=pam-helper \
+    --server-user=$(whoami) \
+    --database-config-file=/tmp/database.conf \
+    --server-data-dir=/tmp/rstudio-server-data 
